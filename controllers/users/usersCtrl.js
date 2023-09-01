@@ -37,6 +37,36 @@ const registerUserCtrl = async (request, response, next) => {
   }
 };
 
+// ! login
+const userLoginCtrl = async (request, response, next) => {
+  // ? destructing the request
+  const { email, password } = request.body;
+  try {
+    // TODO: check if email exists
+    const userFound = await User.findOne({ email });
+    if (!userFound) {
+      return next(appErr("Invalid login credentials", 400));
+    }
+
+    // TODO: check if password matches
+    const isPasswordMatch = await bcrypt.compare(password, userFound.password);
+    if (!isPasswordMatch) {
+      return next(appErr("Invalid login credentials", 400));
+    }
+
+    // ? sending the response
+    response.json({
+      status: "success",
+      id: userFound._id,
+      fullname: userFound.fullname,
+      token: generateToken(userFound._id),
+    });
+  } catch (error) {
+    next(appErr(error.message, 500));
+  }
+};
+
 module.exports = {
   registerUserCtrl,
+  userLoginCtrl,
 };
