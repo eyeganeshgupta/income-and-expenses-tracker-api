@@ -83,6 +83,19 @@ const userProfileCtrl = async (request, response) => {
   }
 };
 
+// ! delete
+const deleteUserCtrl = async (request, response, next) => {
+  try {
+    await User.findByIdAndDelete(request.user);
+    response.status(200).json({
+      status: "success",
+      data: null,
+    });
+  } catch (error) {
+    next(appErr(error.message, 500));
+  }
+};
+
 module.exports = {
   registerUserCtrl,
   userLoginCtrl,
