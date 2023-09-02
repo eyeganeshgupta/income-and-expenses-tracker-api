@@ -96,7 +96,61 @@ const deleteUserCtrl = async (request, response, next) => {
   }
 };
 
+// ! update
+const updateUserCtrl = async (request, response, next) => {
+  try {
+    // TODO 01: Check if email exist
+    if (request.body.email) {
+      const userFound = await User.findOne({ email: request.body.email });
+      if (userFound)
+        return next(
+          appErr("Email is taken or you already have this email", 400)
+        );
+    }
+
+    // TODO 02: Check if user is updating the password
+    if (request.body.password) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(request.body.password, salt);
+      // TODO 02.1: update the user
+      const user = await User.findByIdAndUpdate(
+        request.user,
+        {
+          password: hashedPassword,
+        },
+        {
+          new: true,
+          runValidators: true,
+        }
+      );
+
+      // ? send the response
+      return response.status(200).json({
+        status: "success",
+        data: user,
+      });
+    }
+
+    const user = await User.findByIdAndUpdate(request.user, request.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    // ? send the response
+    response.status(200).json({
+      status: "success",
+      data: user,
+    });
+  } catch (error) {
+    next(new AppErr(error.message, 500));
+  }
+};
+
 module.exports = {
   registerUserCtrl,
   userLoginCtrl,
+  userLoginCtrl,
+  userProfileCtrl,
+  deleteUserCtrl,
+  updateUserCtrl,
 };
