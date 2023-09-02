@@ -66,6 +66,23 @@ const userLoginCtrl = async (request, response, next) => {
   }
 };
 
+// ! profile
+const userProfileCtrl = async (request, response) => {
+  // * request.user has userid
+  try {
+    const user = await User.findById(request.user).populate({
+      path: "accounts",
+      populate: {
+        path: "transactions",
+        model: "Transaction",
+      },
+    });
+    response.json(user);
+  } catch (error) {
+    next(appErr(error.message, 500));
+  }
+};
+
 module.exports = {
   registerUserCtrl,
   userLoginCtrl,
