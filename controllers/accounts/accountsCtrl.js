@@ -37,6 +37,16 @@ const createAccountCtrl = async (request, response, next) => {
   }
 };
 
+// ! get all accounts
+const getAccountsCtrl = async (request, response) => {
+  try {
+    const accounts = await Account.find().populate("transactions");
+    response.json(accounts);
+  } catch (error) {
+    next(appErr(error.message, 500));
+  }
+};
+
 module.exports = {
   createAccountCtrl,
   getAccountCtrl,
