@@ -47,6 +47,24 @@ const getAccountsCtrl = async (request, response) => {
   }
 };
 
+// ! get single acoount
+const getAccountCtrl = async (request, response, next) => {
+  try {
+    // TODO: find the id from params
+    const { id } = request.params;
+
+    const account = await Account.findById(id).populate("transactions");
+
+    // ? sending the response
+    response.json({
+      status: "success",
+      data: account,
+    });
+  } catch (error) {
+    next(appErr(error.message, 500));
+  }
+};
+
 module.exports = {
   createAccountCtrl,
   getAccountCtrl,
