@@ -65,6 +65,24 @@ const getAccountCtrl = async (request, response, next) => {
   }
 };
 
+// ! delete account
+const deleteAccountCtrl = async (request, response, next) => {
+  try {
+    // TODO: find the id from params
+    const { id } = request.params;
+
+    await Account.findByIdAndDelete(id);
+
+    // ? sending the response
+    response.status(200).json({
+      status: "success",
+      data: null,
+    });
+  } catch (error) {
+    next(appErr(error.message, 500));
+  }
+};
+
 module.exports = {
   createAccountCtrl,
   getAccountCtrl,
