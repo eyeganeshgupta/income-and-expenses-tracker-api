@@ -83,6 +83,27 @@ const deleteAccountCtrl = async (request, response, next) => {
   }
 };
 
+// ! update account
+const updateAccountCtrl = async (request, response) => {
+  try {
+    // TODO: find the id from params
+    const { id } = request.params;
+
+    const account = await Account.findByIdAndUpdate(id, request.body, {
+      new: true,
+      runValidators: true,
+    });
+
+    // ? sending the response
+    response.json({
+      status: "success",
+      data: account,
+    });
+  } catch (error) {
+    next(appErr(error.message, 500));
+  }
+};
+
 module.exports = {
   createAccountCtrl,
   getAccountCtrl,
