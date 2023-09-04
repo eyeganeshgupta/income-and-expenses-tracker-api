@@ -46,6 +46,19 @@ const createTransactionCtrl = async (request, response, next) => {
   }
 };
 
+// ! get all transactions
+const getTransactionsCtrl = async (request, response, next) => {
+  try {
+    const trans = await Transaction.find();
+    response.status(200).json({
+      status: "success",
+      data: trans,
+    });
+  } catch (error) {
+    next(appErr(error.message, 500));
+  }
+};
+
 module.exports = {
   createTransactionCtrl,
   getTransactionsCtrl,
