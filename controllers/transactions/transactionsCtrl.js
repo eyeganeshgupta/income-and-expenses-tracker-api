@@ -84,6 +84,23 @@ const deleteTransactionCtrl = async (request, response, next) => {
   }
 };
 
+// ! update transaction
+const updateTransactionCtrl = async (request, response, next) => {
+  try {
+    const { id } = request.params;
+    const tran = await Transaction.findByIdAndUpdate(id, request.body, {
+      new: true,
+      runValidators: true,
+    });
+    response.json({
+      status: "success",
+      data: tran,
+    });
+  } catch (error) {
+    next(appErr(error.message, 500));
+  }
+};
+
 module.exports = {
   createTransactionCtrl,
   getTransactionsCtrl,
