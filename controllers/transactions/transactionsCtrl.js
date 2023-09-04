@@ -70,6 +70,20 @@ const getTransactionCtrl = async (request, response) => {
   }
 };
 
+// ! delete transaction
+const deleteTransactionCtrl = async (request, response, next) => {
+  try {
+    const { id } = request.params;
+    await Transaction.findByIdAndDelete(id);
+    response.json({
+      status: "success",
+      data: null,
+    });
+  } catch (error) {
+    next(appErr(error.message, 500));
+  }
+};
+
 module.exports = {
   createTransactionCtrl,
   getTransactionsCtrl,
