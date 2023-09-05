@@ -5,3 +5,14 @@ class AppErr extends Error {
     this.status = "failed";
   }
 }
+
+const appErr = (message, statusCode) => {
+  let error = new Error(message);
+  error.statusCode = statusCode;
+  return error;
+};
+
+module.exports = {
+  AppErr,
+  appErr,
+};
