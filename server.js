@@ -10,6 +10,16 @@ const transactionsRoute = require("./routes/transactions/transactionsRoute");
 
 const app = express();
 
+// ! middlewares
+// ? pass the incoming data
+app.use(express.json());
+
+// ! routes
+// * users route
+app.use("/api/v1/users", usersRoute);
+app.use("/api/v1/accounts", accountRoutes);
+app.use("/api/v1/transactions", transactionsRoute);
+
 // ! error handlers
 app.use(globalErrHandler);
 
